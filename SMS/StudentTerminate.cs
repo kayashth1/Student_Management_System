@@ -116,7 +116,10 @@ namespace SMS
             try
             {
                 WControls.DBConOpen();
-                cmd = new SqlCommand("Delete from Student Where Student_id='"+LastStudId_lbl.Text+"' and Phone='"+Phone_lbl.Text+"'",WControls.connection);
+                // SECURE: Using parameterized query to prevent SQL injection
+                cmd = new SqlCommand("Delete from Student Where Student_id=@StudentId and Phone=@Phone", WControls.connection);
+                cmd.Parameters.AddWithValue("@StudentId", LastStudId_lbl.Text);
+                cmd.Parameters.AddWithValue("@Phone", Phone_lbl.Text);
                 cmd.ExecuteNonQuery();
                 WControls.DBConClose();
                 LoadData();                
@@ -138,7 +141,9 @@ namespace SMS
             try
             {
                 WControls.DBConOpen();
-                cmd = new SqlCommand("Delete from Student Where Student_id='" + SearchDel_tbx.Text + "'", WControls.connection);
+                // SECURE: Using parameterized query to prevent SQL injection
+                cmd = new SqlCommand("Delete from Student Where Student_id=@StudentId", WControls.connection);
+                cmd.Parameters.AddWithValue("@StudentId", SearchDel_tbx.Text);
                 cmd.ExecuteNonQuery();
                 SearchDel_tbx.Text = null;
                 WControls.DBConClose();
